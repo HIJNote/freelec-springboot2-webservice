@@ -62,9 +62,11 @@ repositories {
 
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
+    //롬복사용
     compile('org.projectlombok:lombok')
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
-    //compile('org.springframework.boot:spring-boot-starter-mustache')
+    //머스테치 사용
+    compile('org.springframework.boot:spring-boot-starter-mustache')
     compile('com.h2database:h2')
 
     //compile('org.springframework.boot:spring-boot-starter-oauth2-client')
