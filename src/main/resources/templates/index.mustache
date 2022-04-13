@@ -5,9 +5,26 @@
     <div class="row">
         <div class="col-md-6">
             <a href="/posts/save" role="button" class="btn btn-primary">글 등록</a>
+                <!--머스테치는 if문을 제공하지 않음. true/false여부만 판단할 뿐
+                 그래서 머스테치에서는 항상 최종값을 넘겨줘야 한다.
+                 여기서도 역시 userName이 있다면 userName을 노출시키도록 구성했다.-->
+            {{#userName}}
+                Logged in as: <span id="user">{{userName}}</span>
+                <a href="/logout" class="btn btn-info active" role="button">Logout</a><!--스프링 시큐리티에서 기본적으로 제공하는 로그아웃 URL이다.
+                즉,개발자가 별도로 저 URL에 해당하는 컨트롤러를 만들 필요가 없다.-->
+            {{/userName}}
+            <!--머스테치에서 해당 값이 존재 없을경우 ^를 사용하면된다. 있을경우는 당연히#이다.-->
+            {{^userName}}
+                <!--스프링 시큐리티에서 기본적으로 제공하는 로그인 URL이다. 로그아웃 URL과 마찬가지로 개발자가 별도의 컨트롤러를 생성할
+                필요가 없다.-->
+                <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
+                <a href="/oauth2/authorization/naver" class="btn btn-secondary active" role="button">Naver Login</a>
+            {{/userName}}
         </div>
     </div>
     <br>
+
+
     <!-- 목록 출력 영역 -->
     <table class="table table-horizontal table-bordered">
         <thead class="thead-strong">
@@ -19,10 +36,10 @@
         </tr>
         </thead>
         <tbody id="tbody">
-            <!--
-            posts 라는 List를 순회함
-            Java의 for문과 동일기능
-            -->
+        <!--
+        posts 라는 List를 순회함
+        Java의 for문과 동일기능
+        -->
         {{#posts}}
             <tr>
                 <!--List에서 뽑아낸 객체의 필드를 사용함-->
