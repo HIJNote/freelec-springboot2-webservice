@@ -19,11 +19,15 @@ cache:
 # master 브랜치에 푸시되었을 때 수행할 명령어
 script: "./gradlew clean build"
 
-before_deploy: # deploy 수행전 명령
-  - zip -r freelec-springboot2-webservice *
-  - mkdir -p deploy
-  - mv freelec-springboot2-webservice.zip deploy/freelec-springboot2-webservice.zip
-
+before_deploy:
+  - mkdir -p before-deploy # zip에 포함시킬 파일들을 담을 디렉토리 생성 / Travis CI는 S3로 특정 파일만 업로드가 안됨. 디렉토리 단위로만 업로드 가능
+  - cp scripts/*.sh before-deploy/ #before-deploy에는 zip파일에 포함시킬 파일들을 저장함
+  - cp appspec.yml before-deploy/
+  - cp build/libs/*.jar before-deploy/
+  - cd before-deploy && zip -r before-deploy * # before-deploy로 이동후 전체 압축( zip -r )
+  - cd ../ && mkdir -p deploy # 상위 디렉토리로 이동후 deploy 디렉토리 생성
+  - mv before-deploy/before-deploy.zip deploy/freelec-springboot2-webservice.zip # deploy로 zip파일 이동
+  -
 deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY #Travis repo setting
@@ -38,7 +42,7 @@ deploy:
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
-    bucket: freelec-springboot-build-hij
+    bucket: freelec-springboot-build-hij # S3버킷 이름->.build 중복이여서 -hij 추가
     key: freelec-springboot2-webservice.zip # 빌드 파일을 압축해서 전달
     bundle_type: zip
     application: freelec-springboot2-webservice # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
