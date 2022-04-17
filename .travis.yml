@@ -28,11 +28,22 @@ deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY #Travis repo setting
     secret_access_key: $AWS_SECRET_KEY #Travis repo setting
-    bucket: freelec-springboot-build-hij # S3버킷
+    bucket: freelec-springboot-build-hij # S3버킷의 이름
     region: ap-northeast-2
     skip_cleanup: true
     acl: private # zip 파일 접근을 private
     local_dir: deploy # before_deploy에서 생성한 디렉토리
+    wait-until-deployed: true
+
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: freelec-springboot-build-hij
+    key: freelec-springboot2-webservice.zip # 빌드 파일을 압축해서 전달
+    bundle_type: zip
+    application: freelec-springboot2-webservice # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
+    deployment_group: freelec-springboot2-webservice-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
+    region: ap-northeast-2
     wait-until-deployed: true
 
 # CI 시행완료 시 메일로 알람
