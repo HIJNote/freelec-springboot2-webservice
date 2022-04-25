@@ -14,7 +14,7 @@ echo "> 현재 구동중인 애플리케이션 pid 확인"
 #스프링 부트 애플리케이션 이름(freelec-springboot2-webservice)으로 된 다른 프로그램들이 있을 수 있어
 # freelec-springboot2-webservice로 된 jar(pgrep -fl freelec-springboot2-webservice |grep jar) 프로세스를
 #찾은 뒤 ID를 찾습니다.
-CURRENT_PID=$(pgrep -fl freelec-springboot2-webservice | grep jar | awk '{print $1}')
+CURRENT_PID=$(pgrep -fl freelec-springboot2-webservice | grep java | awk '{print $1}')
 
 echo "현재 구동중인 어플리케이션 pid: $CURRENT_PID"
 
